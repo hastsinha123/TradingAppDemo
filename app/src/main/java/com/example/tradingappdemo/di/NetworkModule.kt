@@ -20,6 +20,7 @@ object NetworkModule {
             .pingInterval(20, TimeUnit.SECONDS)
             .build()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideGson(): Gson = Gson()
 }

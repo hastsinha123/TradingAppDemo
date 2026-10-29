@@ -10,7 +10,7 @@ class ObserveLatestPriceUseCase @Inject constructor(private val priceRepository:
 
     fun getStocksFlow(stocks : List<Stock>) : Flow<Map<String, Double>> {
         return priceRepository.observeData(stocks.map { it.identifier }).scan(emptyMap()){ current, data ->
-            current + (data.icon to data.price)
+            current + (data.symbol to data.price)
         }
     }
 

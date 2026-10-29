@@ -48,7 +48,11 @@ fun TradingScreen(viewModel: TradingAppViewModel = hiltViewModel()) {
     Scaffold(
         topBar = { CenterAlignedTopAppBar(title = { Text("Stocks Watcher") }) },
     ) { padding ->
-        Column(Modifier.fillMaxSize().padding(padding)) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
             if (state.isConnecting) LinearProgressIndicator(Modifier.fillMaxWidth())
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),

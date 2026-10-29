@@ -11,13 +11,10 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.IOException
-import okio.Timeout
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class WebSocketDataSource @Inject constructor(
-    private val client: OkHttpClient,
-    private val gson: Gson
+    private val client: OkHttpClient, private val gson: Gson
 ) {
 
     fun getTradingData(identifiers: List<String>): Flow<PriceData> = callbackFlow {

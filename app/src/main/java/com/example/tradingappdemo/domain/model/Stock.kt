@@ -1,8 +1,7 @@
 package com.example.tradingappdemo.domain.model
 
 data class Stock(
-    val identifier : String,
-    val name: String
+    val identifier: String, val name: String
 )
 
 val stocks = listOf(
@@ -13,5 +12,5 @@ val stocks = listOf(
     Stock("XRPUSDT", "XRP"),
     Stock("DOGEUSDT", "Dogecoin"),
     Stock("ADAUSDT", "Cardano"),
-    Stock("TRXUSDT", "TRON"),
+    Stock("TRXUSDT", "TRON")
 )

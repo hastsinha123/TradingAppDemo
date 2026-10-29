@@ -25,20 +25,16 @@ class TradingAppViewModel @Inject constructor(
     private val initial = TradingUiState(
         rows = stocksList.map {
             StockUi(it.identifier, it.name)
-        },
-        isConnecting = true
+        }, isConnecting = true
     )
 
     val uiState: StateFlow<TradingUiState> =
         observeLatestPriceUseCase.getStocksFlow(stocksList).sample(200.milliseconds)
-            .runningFold(initial)
-            { old, new ->
+            .runningFold(initial) { old, new ->
                 old.reduce(new)
             }.stateIn(
-            viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000.milliseconds),
-            initial
-        )
+                viewModelScope, started = SharingStarted.WhileSubscribed(5000.milliseconds), initial
+            )
 
     fun TradingUiState.reduce(prices: Map<String, Double>): TradingUiState {
         val newRows = rows.map {
@@ -49,14 +45,11 @@ class TradingAppViewModel @Inject constructor(
 
             val old = it.price
             it.copy(
-                price = newPrice,
-                priceText = formatPrice(newPrice),
-                direction = when {
+                price = newPrice, priceText = formatPrice(newPrice), direction = when {
                     old == null -> Direction.NONE
                     old < newPrice -> Direction.UP
                     else -> Direction.DOWN
-                },
-                flashId = it.flashId + 1
+                }, flashId = it.flashId + 1
             )
         }
         return copy(rows = newRows, isConnecting = newRows.all { it.price == null })
@@ -67,6 +60,5 @@ class TradingAppViewModel @Inject constructor(
         p >= 1 -> String.format(Locale.US, "%.3f", p)
         else -> String.format(Locale.US, "%.5f", p)
     }
-
 
 }
