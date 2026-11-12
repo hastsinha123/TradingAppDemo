@@ -1,6 +1,7 @@
 package com.example.tradingappdemo.di
 
-import com.google.gson.Gson
+import com.example.tradingappdemo.data.network.BackoffPolicy
+import com.example.tradingappdemo.data.network.ExponentialBackoffPolicy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +22,5 @@ object NetworkModule {
             .build()
 
     @Provides
-    @Singleton
-    fun provideGson(): Gson = Gson()
+    fun provideBackoffPolicy(): BackoffPolicy = ExponentialBackoffPolicy()
 }
