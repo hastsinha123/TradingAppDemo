@@ -1,57 +1,64 @@
 # TradingAppDemo
 
-A small Android app that shows live prices for 8 coins. When a price goes up the row flashes
-green, and when it goes down it flashes red. I focused on keeping the list smooth even when
-prices update very fast.
+An Android app that shows live crypto prices. It connects to Binance's public WebSocket,
+shows the 24h percentage change for each coin, and keeps working when the connection drops.
 
 Built with Kotlin, Jetpack Compose, Coroutines/Flow, Hilt and OkHttp.
 
-## Where the prices come from
+## What it does
 
-The app listens to Binance's public WebSocket, so no API key is needed:
-
-```
-wss://stream.binance.com:9443/stream?streams=btcusdt@trade/ethusdt@trade/...
-```
-
-I used crypto pairs instead of stocks because they trade 24/7, so you can see the live
-updates at any time. Stock feeds usually need an API key and only run during market hours.
-
-## How to run
-
-1. Clone the repo and open it in Android Studio.
-2. Let Gradle sync, then run the `app` on an emulator or phone with internet.
+- Live prices that flash green or red on every tick
+- 24h change shown as a percentage pill (for example `▲ +2.35%`)
+- Search by name or ticker
+- Filter by All, Gainers or Losers, and sort by name, price or 24h change
+- Summary bar showing how many coins are up vs. down
+- Handles bad connections: loading skeletons, offline banner, automatic reconnect,
+  and an error screen with a retry button
+- Light and dark theme
 
 ## How it's built
 
-I used MVVM with a repository, and Hilt for dependency injection.
+The code is split into three layers:
+
+- `domain`: models, repository interfaces and use cases. Plain Kotlin, no Android code.
+- `data`: the WebSocket, message parsing, reconnect logic and network monitoring.
+- `presentation`: the ViewModel, UI state and Compose screens.
+
+Data flows one way: WebSocket -> repository -> use case -> ViewModel -> UI.
+Hilt connects the pieces together.
+
+## Connection handling
+
+- The socket closes a few seconds after the app goes to the background and reopens on return.
+- If the socket fails, the app retries after 1s, 2s, 4s and so on, up to 30s.
+- If the internet drops, the socket is closed and the app shows an offline banner.
+  It reconnects as soon as the network is back.
+- The last known prices stay on screen (dimmed) while reconnecting.
+- The UI updates about 5 times a second, even though the socket can send hundreds of
+  messages per second.
+
+## Tests
+
+Unit tests cover the domain logic, message parser, backoff timing, reconnect behaviour
+and the ViewModel. Run them with:
 
 ```
-Binance WebSocket
-  -> data source      parses the JSON into a price
-  -> repository       reconnects if the connection drops
-  -> ViewModel        limits updates and works out up/down
-  -> Compose screen   shows the rows and the flash
+./gradlew testDebugUnitTest
 ```
 
-- **data:** the WebSocket and the JSON parsing
-- **domain:** the models and the repository interface
-- **presentation:** the ViewModel and the Compose screen
-- **di:** the Hilt modules
+## Data source
 
-## How I kept it smooth
+`wss://stream.binance.com:9443/stream` (public, no API key). Each coin uses two streams:
+`@trade` for the live price and `@ticker` for the 24h open price used in the percentage change.
 
-- **Fewer updates.** The socket can send hundreds of prices a second. The ViewModel only passes
-  the latest prices to the screen about 5 times a second.
-- **Only changed rows redraw.** Rows use stable keys, so Compose skips any row whose price
-  didn't change.
-- **The flash doesn't cause recomposition.** The colour is drawn in the draw phase, so the
-  animation repaints the row without rebuilding it.
-- **Saves battery.** The socket closes shortly after the app goes to the background.
+## Running it
 
-## Trade-offs
+Open the project in Android Studio, sync Gradle, and run the `app` module on a device or
+emulator with internet access.
 
-- The watchlist is hardcoded. A real app would let the user choose their own.
-- Sampling every 200 ms adds a tiny delay in exchange for smoothness.
-- Prices are `Double`, which is fine for showing them. A real trading engine would use
-  `BigDecimal`.
+## Possible improvements
+
+- Let users edit their own watchlist (the list is currently fixed)
+- A detail screen with a price chart
+- Favourites saved locally
+- UI tests for the Compose screens

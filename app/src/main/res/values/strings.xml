@@ -1,3 +1,43 @@
 <resources>
     <string name="app_name">TradingAppDemo</string>
+
+    <string name="screen_title">Markets</string>
+    <string name="screen_subtitle">Live crypto prices · Binance</string>
+
+    <string name="search_placeholder">Search coins</string>
+    <string name="clear_search">Clear search</string>
+
+    <string name="filter_all">All</string>
+    <string name="filter_gainers">Gainers · %1$d</string>
+    <string name="filter_losers">Losers · %1$d</string>
+    <string name="sort_label">Sort: %1$s</string>
+    <string name="sort_watchlist">Default</string>
+    <string name="sort_name">Name</string>
+    <string name="sort_price">Price</string>
+    <string name="sort_change">24h change</string>
+
+    <string name="status_live">LIVE</string>
+    <string name="status_connecting">CONNECTING</string>
+    <string name="status_reconnecting">RECONNECTING</string>
+    <string name="status_offline">OFFLINE</string>
+
+    <string name="banner_connecting">Connecting to the market…</string>
+    <string name="banner_reconnecting">Connection lost. Reconnecting (attempt %1$d)…</string>
+    <string name="banner_offline">You\'re offline. Showing the last known prices.</string>
+
+    <string name="pulse_title">Market pulse · 24h</string>
+    <string name="pulse_up">▲ %1$d up</string>
+    <string name="pulse_down">▼ %1$d down</string>
+
+    <string name="error_offline_title">You\'re offline</string>
+    <string name="error_offline_message">Check your internet connection. We\'ll reconnect automatically as soon as you\'re back online.</string>
+    <string name="error_failed_title">Can\'t reach the market</string>
+    <string name="error_failed_message">The live price feed isn\'t responding. Please try again.</string>
+    <string name="retry">Try again</string>
+
+    <string name="empty_title">No coins found</string>
+    <string name="empty_message">Nothing matches your search or filter. Try a different name, or clear the filters.</string>
+
+    <string name="row_description">%1$s, price %2$s, 24 hour change %3$s</string>
+    <string name="change_unavailable_spoken">not available yet</string>
 </resources>
